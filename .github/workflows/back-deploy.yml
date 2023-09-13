@@ -7,12 +7,12 @@ name: Spring Boot & Gradle CI/CD
 on:
   push:
     branches:
-      - main 
+      - master 
 
 jobs:
   build:
     # 실행 환경 지정
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     # Task의 sequence를 명시한다.
     steps:
@@ -34,8 +34,8 @@ jobs:
       - name: web docker build and push
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/randps-front .
-          docker push ${{ secrets.DOCKER_USERNAME }}/randps-front
+          docker build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/randps-back .
+          docker push ${{ secrets.DOCKER_USERNAME }}/randps-back
           
       # 보안그룹에 github actions ip 추가
       - name: Get Github Actions IP
@@ -60,8 +60,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/randps-front
+            sudo docker rm -f $(sudo docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/randps-back
             sudo docker-compose up -d
             sudo docker image prune -f
 
