@@ -7,7 +7,7 @@ name: Spring Boot & Gradle CI/CD
 on:
   push:
     branches:
-      - main 
+      - master 
 
 jobs:
   build:
