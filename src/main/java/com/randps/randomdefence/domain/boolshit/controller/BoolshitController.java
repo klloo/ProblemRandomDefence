@@ -23,6 +23,7 @@ public class BoolshitController {
      */
     @GetMapping("/last")
     public BoolshitResponse findLast() {
+        // 배포 테스트
         return boolshitService.findLast();
     }
 
