@@ -19,7 +19,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Arrays.asList("Access_Token", "Refresh_Token"));
-        config.addAllowedOriginPattern("/api/v1/user/auth/refresh"); // 허용할 URL
+        config.addAllowedOriginPattern("*"); // 허용할 URL
         config.addAllowedHeader("*"); // 허용할 Header
         config.addAllowedMethod("*"); // 허용할 Http Method
         // ⭐CORS 는 해결했지만 프론트에 응답 헤더에 추가한 Authorization 이 전달되지 않는 문제 해결
