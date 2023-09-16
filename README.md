@@ -10,7 +10,7 @@ A site where you can manage study groups based on user information from the 'Bea
 - Team-based Competitions
 - User Statistics
 
-These features help you manage your study and increase the motivation of your study members to learn algorithms.
+These features help you manage your study and increase the motivation of your study members to learn algorithms
 
 
 ## Dependencies
