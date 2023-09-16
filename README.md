@@ -2,9 +2,6 @@
 # 🥑 Problem-Solving Study Group website
 A site where you can manage study groups based on user information from the 'Beakjoon online judge' and 'Solved.ac'.
 
-https://randps.kr
-
-
 ## Functionality
 
 - Random Problem Streak
@@ -13,7 +10,7 @@ https://randps.kr
 - Team-based Competitions
 - User Statistics
 
-These features help you manage your study and increase the motivation of your study members to learn algorithms.
+These features help you manage your study and increase the motivation of your study members to learn algorithms
 
 
 ## Dependencies
@@ -48,5 +45,3 @@ docker push [{image}/{Repository}]
 # docker run
 docker run -p 8080:8080 {dockerHubID}/{image}
 ```
-
-### ⚠️ Don't forget to change your JWT secret key and datasource ⚠️
