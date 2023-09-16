@@ -2,9 +2,6 @@
 # 🥑 Problem-Solving Study Group website
 A site where you can manage study groups based on user information from the 'Beakjoon online judge' and 'Solved.ac'.
 
-https://randps.kr
-
-
 ## Functionality
 
 - Random Problem Streak
