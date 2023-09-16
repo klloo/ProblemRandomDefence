@@ -45,5 +45,3 @@ docker push [{image}/{Repository}]
 # docker run
 docker run -p 8080:8080 {dockerHubID}/{image}
 ```
-
-### ⚠️ Don't forget to change your JWT secret key and datasource ⚠️
