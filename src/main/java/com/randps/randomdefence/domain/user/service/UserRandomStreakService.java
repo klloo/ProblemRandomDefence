@@ -1,5 +1,6 @@
 package com.randps.randomdefence.domain.user.service;
 
+import com.randps.randomdefence.domain.event.service.EventPointService;
 import com.randps.randomdefence.domain.item.service.RandomStreakFreezeItemUseServiceImpl;
 import com.randps.randomdefence.domain.log.domain.PointLogRepository;
 import com.randps.randomdefence.domain.log.service.PointLogSaveService;
@@ -46,6 +47,8 @@ public class UserRandomStreakService {
     private final TeamService teamService;
 
     private final RandomStreakFreezeItemUseServiceImpl randomStreakFreezeItemUseService;
+
+    private final EventPointService eventPointService;
 
     /*
      * 유저 랜덤 스트릭 생성하기 (유저 생성 시 사용)
@@ -133,6 +136,27 @@ public class UserRandomStreakService {
         }
 
         return userRandomStreakResponses;
+    }
+
+    /**
+     * 리롤이 가능한지 체크하고 리롤비용을 지불한다.
+     */
+    @Transactional
+    public RecommendationResponse payReroll(String bojHandle) {
+        User user = userRepository.findByBojHandle(bojHandle).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+
+        // 리롤비용 5원이 없다면 리롤에 실패
+        if (user.getPoint() < 5) {
+            throw new IllegalArgumentException("포인트가 부족합니다.");
+        }
+
+        // 5포인트 사용
+        user.decreasePoint(5);
+        pointLogSaveService.savePointLog(bojHandle, -5, "-5 points, purchase \'" + "랜덤 문제 다시뽑기" + "\'", true);
+        userRepository.save(user);
+
+        // 랜덤문제 추천
+        return makeUpUserRandomProblem(bojHandle);
     }
 
     /*
@@ -241,6 +265,9 @@ public class UserRandomStreakService {
                 user.increasePoint(randomProblem.getLevel() * 2); // 문제의 레벨 * 2만큼의 포인트를 지급한다.
                 pointLogSaveService.savePointLog(bojHandle, randomProblem.getLevel() * 2,  randomProblem.getLevel() * 2 + " points are earned by solving random problem " + randomProblem.getProblemId().toString() + " : " + "\"" + randomProblem.getTitleKo() + "\""+ " level - " + convertDifficulty(randomProblem.getLevel()), true);
 
+                // 이벤트를 적용한다
+                eventPointService.applyEventPoint(bojHandle, randomProblem.getLevel());
+
                 // 팀의 점수를 올린다. (랜덤 문제)
                 teamService.increaseTeamScore(user.getTeam(), randomProblem.getLevel() * 2);
                 // 유저 통계를 반영한다. (랜덤 문제)
@@ -286,6 +313,9 @@ public class UserRandomStreakService {
                     // 유저의 정보 갱신
                     userCur.increasePoint(randomProblem.getLevel() * 2); // 문제의 레벨 * 2만큼의 포인트를 지급한다.
                     pointLogSaveService.savePointLog(userCur.getBojHandle(), randomProblem.getLevel() * 2,  randomProblem.getLevel() * 2 + " points are earned by solving random problem " + randomProblem.getProblemId().toString() + " : " + "\"" + randomProblem.getTitleKo() + "\""+ " level - " + convertDifficulty(randomProblem.getLevel()), true);
+
+                    // 이벤트를 적용한다
+                    eventPointService.applyEventPoint(userCur.getBojHandle(), randomProblem.getLevel());
 
                     // 팀의 점수를 올린다. (랜덤 문제)
                     teamService.increaseTeamScore(userCur.getTeam(), randomProblem.getLevel() * 2);
