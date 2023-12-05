@@ -2,14 +2,13 @@ package com.randps.randomdefence.global.config;
 
 import com.randps.randomdefence.domain.user.domain.UserRepository;
 import com.randps.randomdefence.domain.user.service.PrincipalDetailsService;
-import com.randps.randomdefence.global.config.filter.JwtAuthenticationFilter;
-import com.randps.randomdefence.global.config.filter.JwtAuthorizationFilter;
 import com.randps.randomdefence.global.config.filter.JwtRefreshAuthFilter;
 import com.randps.randomdefence.global.jwt.JwtProvider;
 import com.randps.randomdefence.global.jwt.JwtRefreshUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -58,7 +57,8 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
 //                .anyRequest().permitAll()
-                .antMatchers("/api/v1/user/auth/login", "/api/v1/user/auth/logout", "/api/v1/user/add/all").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/api/v1/**").permitAll()
+                .antMatchers("/api/v1/user/auth/login", "/api/v1/user/auth/logout", "/api/v1/user/add/all", "/api/v1/user/admin/init").permitAll()
                 .antMatchers("/api/v1/user/add", "/api/v1/user/del", "/api/v1/scraping/*", "api/v1/admin/*").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
